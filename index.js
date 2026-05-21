@@ -308,6 +308,7 @@ app.post('/webhook', async (req, res) => {
 
   try {
     const body = req.body;
+    if (!body || typeof body !== 'object') return;
     
     // Formato WATI
     const numero = body.waId;
