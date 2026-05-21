@@ -4,10 +4,7 @@ const OpenAI = require('openai');
 const https = require('https');
 
 const app = express();
-app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
-app.use(express.urlencoded({ extended: false }));
-
 
 const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
 
@@ -392,7 +389,7 @@ TORTERA/PECERA:
 
     // Enviar respuesta via WATI API
     const https2 = require('https');
-    const watiData = JSON.stringify({ messageText: textoRespuesta });
+    const watiData = JSON.stringify({ message: textoRespuesta });
     const watiOptions = {
       hostname: 'live-mt-server.wati.io',
       path: `/10164299/api/v1/sendSessionMessage/${numero}`,
@@ -419,3 +416,4 @@ TORTERA/PECERA:
 });
 
 app.listen(3000, () => console.log('Bot Uma corriendo en puerto 3000'));
+
