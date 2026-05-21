@@ -401,6 +401,9 @@ app.post('/webhook', async (req, res) => {
     // Ignorar mensajes enviados por el operador (owner: true)
     if (body.owner === true) return;
 
+    // Si hay un operador asignado, no responder (el humano atiende)
+    if (body.assignedId && body.assignedId !== null && body.assignedId !== '') return;
+
     // Verificar si es cliente activo
     const clienteActivo = await esClienteActivo(numero);
     const channelPhone = body.channelPhoneNumber || '5491125973799';
