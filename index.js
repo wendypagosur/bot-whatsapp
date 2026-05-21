@@ -4,8 +4,18 @@ const OpenAI = require('openai');
 const https = require('https');
 
 const app = express();
-app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
+app.use((req, res, next) => {
+  let data = '';
+  req.on('data', chunk => { data += chunk; });
+  req.on('end', () => {
+    try {
+      req.body = JSON.parse(data);
+    } catch(e) {
+      req.body = {};
+    }
+    next();
+  });
+});
 
 const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
 
