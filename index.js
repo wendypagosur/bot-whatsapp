@@ -5,7 +5,6 @@ const https = require('https');
 
 const app = express();
 app.use(express.urlencoded({ extended: false }));
-app.use(express.json());
 
 const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
 
@@ -308,23 +307,25 @@ app.post('/webhook', async (req, res) => {
 
   try {
     const body = req.body;
-console.log('WATI payload:', JSON.stringify(body));
-
+    
     // Formato WATI
-    const numero = body.waId || body.from;
+    const numero = body.waId;
     let mensajeFinal = '';
 
-    if (body.type === 'text' || body.text) {
-      mensajeFinal = body.text || body.message || '';
+    if (body.type === 'text') {
+      mensajeFinal = body.text || '';
     } else if (body.type === 'image' || body.type === 'document' || body.type === 'video' || body.type === 'sticker') {
       mensajeFinal = '[El cliente envió una imagen o archivo]';
     } else if (body.type === 'audio' || body.type === 'voice') {
       mensajeFinal = '[El cliente envió un audio]';
     } else {
-      mensajeFinal = body.text || body.message || '[mensaje no reconocido]';
+      mensajeFinal = body.text || '';
     }
 
     if (!mensajeFinal || !numero) return;
+    
+    // Ignorar mensajes enviados por el operador (owner: true)
+    if (body.owner === true) return;
 
     if (!conversaciones[numero]) {
       conversaciones[numero] = [];
@@ -388,7 +389,7 @@ TORTERA/PECERA:
 
     // Enviar respuesta via WATI API
     const https2 = require('https');
-    const watiData = JSON.stringify({ message: textoRespuesta });
+    const watiData = JSON.stringify({ messageText: textoRespuesta });
     const watiOptions = {
       hostname: 'live-mt-server.wati.io',
       path: `/10164299/api/v1/sendSessionMessage/${numero}`,
