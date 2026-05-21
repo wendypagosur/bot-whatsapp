@@ -402,7 +402,9 @@ TORTERA/PECERA:
     // Enviar respuesta via WATI API
     const https2 = require('https');
     const encodedMessage = encodeURIComponent(textoRespuesta);
+    const channelPhone = body.channelPhoneNumber || '5491125973799';
     const watiPath = `/10164299/api/v1/sendSessionMessage/${numero}?messageText=${encodedMessage}`;
+    const watiBody = JSON.stringify({ channelPhoneNumber: channelPhone });
     const watiOptions = {
       hostname: 'live-mt-server.wati.io',
       path: watiPath,
@@ -410,7 +412,7 @@ TORTERA/PECERA:
       headers: {
         'Authorization': `Bearer ${process.env.WATI_TOKEN}`,
         'Content-Type': 'application/json',
-        'Content-Length': 0
+        'Content-Length': Buffer.byteLength(watiBody)
       }
     };
     
@@ -420,6 +422,7 @@ TORTERA/PECERA:
       watiRes.on('end', () => console.log('WATI response:', data));
     });
     watiReq.on('error', (e) => console.error('WATI error:', e));
+    watiReq.write(watiBody);
     watiReq.end();
 
   } catch (error) {
