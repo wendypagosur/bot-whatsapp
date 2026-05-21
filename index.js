@@ -313,6 +313,66 @@ Despedida: "¡Gracias a vos! 😊 Cualquier consulta estamos acá. ¡Que tengas 
 const conversaciones = {};
 const primerMensaje = {};
 
+async function esClienteActivo(numero) {
+  return new Promise((resolve) => {
+    const https3 = require('https');
+    const options = {
+      hostname: 'live-mt-server.wati.io',
+      path: `/10164299/api/v1/getContactAttributes/${numero}`,
+      method: 'GET',
+      headers: {
+        'Authorization': `Bearer ${process.env.WATI_TOKEN}`
+      }
+    };
+    const req = https3.request(options, (res) => {
+      let data = '';
+      res.on('data', (chunk) => data += chunk);
+      res.on('end', () => {
+        try {
+          const json = JSON.parse(data);
+          const atributos = json.contact?.contactAttributes || [];
+          const esActivo = atributos.some(a => a.name === 'tipo_cliente' && a.value === 'activo');
+          resolve(esActivo);
+        } catch {
+          resolve(false);
+        }
+      });
+    });
+    req.on('error', () => resolve(false));
+    req.end();
+  });
+}
+
+async function enviarMensajeWATI(numero, mensaje, channelPhone) {
+  return new Promise((resolve) => {
+    const https2 = require('https');
+    const encodedMessage = encodeURIComponent(mensaje);
+    const watiBody = JSON.stringify({ channelPhoneNumber: channelPhone });
+    const watiPath = `/10164299/api/v1/sendSessionMessage/${numero}?messageText=${encodedMessage}`;
+    const watiOptions = {
+      hostname: 'live-mt-server.wati.io',
+      path: watiPath,
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${process.env.WATI_TOKEN}`,
+        'Content-Type': 'application/json',
+        'Content-Length': Buffer.byteLength(watiBody)
+      }
+    };
+    const req = https2.request(watiOptions, (res) => {
+      let data = '';
+      res.on('data', (chunk) => data += chunk);
+      res.on('end', () => {
+        console.log('WATI response:', data);
+        resolve(data);
+      });
+    });
+    req.on('error', (e) => { console.error('WATI error:', e); resolve(null); });
+    req.write(watiBody);
+    req.end();
+  });
+}
+
 app.post('/webhook', async (req, res) => {
   res.sendStatus(200);
 
@@ -338,6 +398,15 @@ app.post('/webhook', async (req, res) => {
     
     // Ignorar mensajes enviados por el operador (owner: true)
     if (body.owner === true) return;
+
+    // Verificar si es cliente activo
+    const clienteActivo = await esClienteActivo(numero);
+    const channelPhone = body.channelPhoneNumber || '5491125973799';
+
+    if (clienteActivo) {
+      await enviarMensajeWATI(numero, '¡Gracias por tu pago! 😊 Quedó registrado 🙌🏻', channelPhone);
+      return;
+    }
 
     if (!conversaciones[numero]) {
       conversaciones[numero] = [];
@@ -399,32 +468,8 @@ TORTERA/PECERA:
     const textoRespuesta = respuesta.choices[0].message.content;
     conversaciones[numero].push({ role: 'assistant', content: textoRespuesta });
 
-    // Enviar respuesta via WATI API
-    const https2 = require('https');
-    console.log('Texto a enviar:', textoRespuesta);
-    const encodedMessage = encodeURIComponent(textoRespuesta);
-    const channelPhone = body.channelPhoneNumber || '5491125973799';
-    const watiPath = `/10164299/api/v1/sendSessionMessage/${numero}?messageText=${encodedMessage}`;
-    const watiBody = JSON.stringify({ channelPhoneNumber: channelPhone });
-    const watiOptions = {
-      hostname: 'live-mt-server.wati.io',
-      path: watiPath,
-      method: 'POST',
-      headers: {
-        'Authorization': `Bearer ${process.env.WATI_TOKEN}`,
-        'Content-Type': 'application/json',
-        'Content-Length': Buffer.byteLength(watiBody)
-      }
-    };
-    
-    const watiReq = https2.request(watiOptions, (watiRes) => {
-      let data = '';
-      watiRes.on('data', (chunk) => data += chunk);
-      watiRes.on('end', () => console.log('WATI response:', data));
-    });
-    watiReq.on('error', (e) => console.error('WATI error:', e));
-    watiReq.write(watiBody);
-    watiReq.end();
+    // Enviar respuesta via WATI
+    await enviarMensajeWATI(numero, textoRespuesta, channelPhone);
 
   } catch (error) {
     console.error('Error:', error);
