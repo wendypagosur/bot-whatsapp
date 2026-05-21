@@ -428,3 +428,4 @@ TORTERA/PECERA:
 });
 
 app.listen(3000, () => console.log('Bot Uma corriendo en puerto 3000'));
+// deploy jueves, 21 de mayo de 2026, 16:26:14 -03
