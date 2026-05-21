@@ -5,6 +5,7 @@ const https = require('https');
 
 const app = express();
 app.use(express.urlencoded({ extended: false }));
+app.use(express.json());
 
 const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
 
@@ -308,7 +309,7 @@ app.post('/webhook', async (req, res) => {
   try {
     const body = req.body;
 console.log('WATI payload:', JSON.stringify(body));
-    
+
     // Formato WATI
     const numero = body.waId || body.from;
     let mensajeFinal = '';
