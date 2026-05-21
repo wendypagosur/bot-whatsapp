@@ -193,7 +193,7 @@ FREEZERS Inelro:
 - FIH-350 280lts 1 canasto: 120 días $9.400
 - FIH-350 PI 280lts tapa vidrio: 120 días $12.200
 - FIH-550 470lts 2 canastos: 120 días $13.300
-- FIH-550 PI 455lts tapa vidrio: 120 días $16.600
+- FIH-550 PI 455lts tapa vidrio: 120 días $14.500
 
 FREEZER VERTICAL Inelro BT-17:
 428lts No Frost, -20/-12C, LED perimetral, puerta doble vidrio templado argón, 5 estantes anticorrosión, 900W, 68x64x206cm, gas R290.
@@ -206,24 +206,24 @@ HORNOS - cuando pregunten por hornos, primero preguntá:
 3️⃣ Horno convector (eléctrico)"
 
 HORNOS PIZZEROS Morelli (a gas natural o envasado, ladrillos refractarios):
-- Pizzero 6 moldes: 100 días $6.850
-- Pizzero 12 moldes: 100 días $8.600
+- Pizzero 6 moldes: 100 días $6.650
+- Pizzero 12 moldes: 100 días $8.400
 
 HORNOS PASTELEROS Morelli (a gas natural o envasado, ladrillos refractarios):
-- Pastelero 6 moldes: 100 días $12.000
-- Pastelero 12 moldes: 100 días $21.650
-- Pastelero 18 moldes: sin stock
+- Pastelero 6 moldes: 100 días $11.150
+- Pastelero 12 moldes: 100 días $20.150
+- Pastelero 18 moldes: 100 días $24.200
 
 HORNOS CONVECTORES (eléctricos):
 - Morelli 4 moldes: 80 días $12.500
-- Moretti 4 bandejas 43x32: sin stock
+- Moretti 4 bandejas 43x32: 100 días $13.200
 - Moretti 4 bandejas 60x40: 100 días $28.200
 - Moretti 5 bandejas programable: 100 días $88.500
 
 FREIDORAS GAS Morelli:
-- 15lts: 100 días $6.850
-- 35lts: 100 días $8.400
-- Eco 30lts: 100 días $17.700
+- 15lts: 100 días $6.500
+- 35lts: 100 días $8.000
+- Eco 30lts: 100 días $16.700
 
 FREIDORAS ELECTRICAS Moretti:
 - Eléctrica 8lts: 80 días $4.400
@@ -303,6 +303,20 @@ Despedida: "¡Gracias a vos! 😊 Cualquier consulta estamos acá. ¡Que tengas 
 const conversaciones = {};
 const primerMensaje = {};
 
+// Verificación del webhook de Meta
+app.get('/webhook', (req, res) => {
+  const VERIFY_TOKEN = 'pagosur2026';
+  const mode = req.query['hub.mode'];
+  const token = req.query['hub.verify_token'];
+  const challenge = req.query['hub.challenge'];
+
+  if (mode && token === VERIFY_TOKEN) {
+    res.status(200).send(challenge);
+  } else {
+    res.sendStatus(403);
+  }
+});
+
 app.post('/webhook', async (req, res) => {
   const mensaje = req.body.Body;
   const numero = req.body.From;
@@ -333,27 +347,27 @@ app.post('/webhook', async (req, res) => {
 PRECIOS CALCULADOS HOY (usá EXACTAMENTE estos valores, no hagas ningún cálculo):
 BATEA VIDRIO CURVO:
 - 1.20mt: 100 días ${formatPesos(precios.batea_curvo_120_100d)} / 80 días ${formatPesos(precios.batea_curvo_120_80d)}
-- 1.60mt: 100 días $31.200 / 80 días ${formatPesos(precios.batea_curvo_160_80d)}
+- 1.60mt: 100 días $31.950 / 80 días ${formatPesos(precios.batea_curvo_160_80d)}
 - 2mts: 100 días ${formatPesos(precios.batea_curvo_200_100d)} / 80 días ${formatPesos(precios.batea_curvo_200_80d)}
 - 2.50mt: 100 días ${formatPesos(precios.batea_curvo_250_100d)} / 80 días ${formatPesos(precios.batea_curvo_250_80d)}
 - 3mts: 100 días ${formatPesos(precios.batea_curvo_300_100d)} / 80 días ${formatPesos(precios.batea_curvo_300_80d)}
 
 BATEA VIDRIO RECTO:
 - 1.20mt: 100 días ${formatPesos(precios.batea_recto_120_100d)} / 80 días ${formatPesos(precios.batea_recto_120_80d)}
-- 1.60mt: 100 días $29.400 / 80 días ${formatPesos(precios.batea_recto_160_80d)}
+- 1.60mt: 100 días $30.050 / 80 días ${formatPesos(precios.batea_recto_160_80d)}
 - 2mts: 100 días ${formatPesos(precios.batea_recto_200_100d)} / 80 días ${formatPesos(precios.batea_recto_200_80d)}
 - 2.50mt: 100 días ${formatPesos(precios.batea_recto_250_100d)} / 80 días ${formatPesos(precios.batea_recto_250_80d)}
 - 3mts: 100 días ${formatPesos(precios.batea_recto_300_100d)} / 80 días ${formatPesos(precios.batea_recto_300_80d)}
 
 MOSTRADOR CON BAJADA:
-- 1.60mt: 100 días $34.600 / 80 días ${formatPesos(precios.mostrador_bajada_160_80d)}
+- 1.60mt: 100 días $35.500 / 80 días ${formatPesos(precios.mostrador_bajada_160_80d)}
 - 2mts: 100 días ${formatPesos(precios.mostrador_bajada_200_100d)} / 80 días ${formatPesos(precios.mostrador_bajada_200_80d)}
 - 2.50mt: 100 días ${formatPesos(precios.mostrador_bajada_250_100d)} / 80 días ${formatPesos(precios.mostrador_bajada_250_80d)}
 - 3mts: 100 días ${formatPesos(precios.mostrador_bajada_300_100d)} / 80 días ${formatPesos(precios.mostrador_bajada_300_80d)}
 
 MOSTRADOR RECTA:
 - 1.20mt: 100 días ${formatPesos(precios.mostrador_recta_120_100d)} / 80 días ${formatPesos(precios.mostrador_recta_120_80d)}
-- 1.60mt: 100 días $35.800 / 80 días ${formatPesos(precios.mostrador_recta_160_80d)}
+- 1.60mt: 100 días $36.650 / 80 días ${formatPesos(precios.mostrador_recta_160_80d)}
 - 2mts: 100 días ${formatPesos(precios.mostrador_recta_200_100d)} / 80 días ${formatPesos(precios.mostrador_recta_200_80d)}
 
 TORTERA/PECERA:
