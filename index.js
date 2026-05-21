@@ -401,6 +401,7 @@ TORTERA/PECERA:
 
     // Enviar respuesta via WATI API
     const https2 = require('https');
+    console.log('Texto a enviar:', textoRespuesta);
     const encodedMessage = encodeURIComponent(textoRespuesta);
     const channelPhone = body.channelPhoneNumber || '5491125973799';
     const watiPath = `/10164299/api/v1/sendSessionMessage/${numero}?messageText=${encodedMessage}`;
