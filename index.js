@@ -1,6 +1,5 @@
 require('dotenv').config();
 const express = require('express');
-const twilio = require('twilio');
 const OpenAI = require('openai');
 const https = require('https');
 
@@ -303,43 +302,40 @@ Despedida: "¡Gracias a vos! 😊 Cualquier consulta estamos acá. ¡Que tengas 
 const conversaciones = {};
 const primerMensaje = {};
 
-// Verificación del webhook de Meta
-app.get('/webhook', (req, res) => {
-  const VERIFY_TOKEN = 'pagosur2026';
-  const mode = req.query['hub.mode'];
-  const token = req.query['hub.verify_token'];
-  const challenge = req.query['hub.challenge'];
-
-  if (mode && token === VERIFY_TOKEN) {
-    res.status(200).send(challenge);
-  } else {
-    res.sendStatus(403);
-  }
-});
-
 app.post('/webhook', async (req, res) => {
-  const mensaje = req.body.Body;
-  const numero = req.body.From;
-  const numMedia = parseInt(req.body.NumMedia || '0');
-
-  if (!conversaciones[numero]) {
-    conversaciones[numero] = [];
-    primerMensaje[numero] = true;
-  }
-
-  let mensajeFinal = mensaje;
-  if (numMedia > 0) {
-    mensajeFinal = '[El cliente envió una imagen o archivo]';
-  }
-
-  if (primerMensaje[numero]) {
-    mensajeFinal = '[PRIMER MENSAJE DEL CLIENTE - responder SIEMPRE con el mensaje de bienvenida sin importar lo que haya escrito] ' + mensajeFinal;
-    primerMensaje[numero] = false;
-  }
-
-  conversaciones[numero].push({ role: 'user', content: mensajeFinal });
+  res.sendStatus(200);
 
   try {
+    const body = req.body;
+    
+    // Formato WATI
+    const numero = body.waId || body.from;
+    let mensajeFinal = '';
+
+    if (body.type === 'text' || body.text) {
+      mensajeFinal = body.text || body.message || '';
+    } else if (body.type === 'image' || body.type === 'document' || body.type === 'video' || body.type === 'sticker') {
+      mensajeFinal = '[El cliente envió una imagen o archivo]';
+    } else if (body.type === 'audio' || body.type === 'voice') {
+      mensajeFinal = '[El cliente envió un audio]';
+    } else {
+      mensajeFinal = body.text || body.message || '[mensaje no reconocido]';
+    }
+
+    if (!mensajeFinal || !numero) return;
+
+    if (!conversaciones[numero]) {
+      conversaciones[numero] = [];
+      primerMensaje[numero] = true;
+    }
+
+    if (primerMensaje[numero]) {
+      mensajeFinal = '[PRIMER MENSAJE DEL CLIENTE - responder SIEMPRE con el mensaje de bienvenida sin importar lo que haya escrito] ' + mensajeFinal;
+      primerMensaje[numero] = false;
+    }
+
+    conversaciones[numero].push({ role: 'user', content: mensajeFinal });
+
     const dolar = await getDolarBNA();
     const precios = await getPreciosCalculados(dolar);
 
@@ -388,17 +384,31 @@ TORTERA/PECERA:
     const textoRespuesta = respuesta.choices[0].message.content;
     conversaciones[numero].push({ role: 'assistant', content: textoRespuesta });
 
-    const twiml = new twilio.twiml.MessagingResponse();
-    twiml.message(textoRespuesta);
-    res.type('text/xml');
-    res.send(twiml.toString());
+    // Enviar respuesta via WATI API
+    const https2 = require('https');
+    const watiData = JSON.stringify({ message: textoRespuesta });
+    const watiOptions = {
+      hostname: 'live-mt-server.wati.io',
+      path: `/10164299/api/v1/sendSessionMessage/${numero}`,
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${process.env.WATI_TOKEN}`,
+        'Content-Type': 'application/json',
+        'Content-Length': Buffer.byteLength(watiData)
+      }
+    };
+    
+    const watiReq = https2.request(watiOptions, (watiRes) => {
+      let data = '';
+      watiRes.on('data', (chunk) => data += chunk);
+      watiRes.on('end', () => console.log('WATI response:', data));
+    });
+    watiReq.on('error', (e) => console.error('WATI error:', e));
+    watiReq.write(watiData);
+    watiReq.end();
 
   } catch (error) {
     console.error('Error:', error);
-    const twiml = new twilio.twiml.MessagingResponse();
-    twiml.message('Disculpá, tuve un problema técnico. Intentalo de nuevo en un momento.');
-    res.type('text/xml');
-    res.send(twiml.toString());
   }
 });
 
