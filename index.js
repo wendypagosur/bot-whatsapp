@@ -318,9 +318,7 @@ app.post('/webhook', async (req, res) => {
 
   try {
     const body = req.body;
-    
-    console.log('BODY COMPLETO:', JSON.stringify(body));
-
+    if (!body || typeof body !== 'object') return;
     
     // Formato WATI
     const numero = body.waId;
@@ -403,15 +401,16 @@ TORTERA/PECERA:
 
     // Enviar respuesta via WATI API
     const https2 = require('https');
-    const watiData = JSON.stringify({ message: textoRespuesta });
+    const encodedMessage = encodeURIComponent(textoRespuesta);
+    const watiPath = `/10164299/api/v1/sendSessionMessage/${numero}?messageText=${encodedMessage}`;
     const watiOptions = {
       hostname: 'live-mt-server.wati.io',
-      path: `/10164299/api/v1/sendSessionMessage/${numero}`,
+      path: watiPath,
       method: 'POST',
       headers: {
         'Authorization': `Bearer ${process.env.WATI_TOKEN}`,
         'Content-Type': 'application/json',
-        'Content-Length': Buffer.byteLength(watiData)
+        'Content-Length': 0
       }
     };
     
@@ -421,7 +420,6 @@ TORTERA/PECERA:
       watiRes.on('end', () => console.log('WATI response:', data));
     });
     watiReq.on('error', (e) => console.error('WATI error:', e));
-    watiReq.write(watiData);
     watiReq.end();
 
   } catch (error) {
@@ -430,4 +428,3 @@ TORTERA/PECERA:
 });
 
 app.listen(3000, () => console.log('Bot Uma corriendo en puerto 3000'));
-// deploy jueves, 21 de mayo de 2026, 16:26:14 -03
