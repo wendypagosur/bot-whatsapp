@@ -351,6 +351,31 @@ async function esClienteActivo(numero) {
   });
 }
 
+async function asignarOperador(numero) {
+  return new Promise((resolve) => {
+    const https4 = require('https');
+    const data = JSON.stringify({ assignedTo: 'wendymachado.-@hotmail.com' });
+    const options = {
+      hostname: 'live-mt-server.wati.io',
+      path: `/10164299/api/v1/assignOperator/${numero}`,
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${process.env.WATI_TOKEN}`,
+        'Content-Type': 'application/json',
+        'Content-Length': Buffer.byteLength(data)
+      }
+    };
+    const req = https4.request(options, (res) => {
+      let d = '';
+      res.on('data', (chunk) => d += chunk);
+      res.on('end', () => { console.log('Asignación:', d); resolve(d); });
+    });
+    req.on('error', (e) => { console.error('Error asignación:', e); resolve(null); });
+    req.write(data);
+    req.end();
+  });
+}
+
 async function enviarMensajeWATI(numero, mensaje, channelPhone) {
   return new Promise((resolve) => {
     const https2 = require('https');
