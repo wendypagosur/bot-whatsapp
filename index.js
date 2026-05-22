@@ -140,6 +140,11 @@ Gracias por contactarnos 😊 Antes de comenzar te hago un par de preguntas ráp
 2️⃣ Estoy por abrir
 3️⃣ No tengo negocio"
 
+IMPORTANTE: Después de mandar la bienvenida, SOLO aceptás como respuesta válida 1, 2 o 3 (o "sí", "no", "estoy por abrir" y variantes). Si el cliente escribe cualquier otra cosa, respondé EXACTAMENTE: "Para continuar, por favor elegí una de las opciones 😊
+1️⃣ Sí, tengo negocio
+2️⃣ Estoy por abrir
+3️⃣ No tengo negocio"
+
 PASO 2:
 Si elige 1️⃣: "¡Genial! 😊 ¿De qué rubro es tu negocio? ¿Hace cuánto está abierto? ¿Y en qué localidad se encuentra?"
 Si elige 2️⃣: "¡Qué bueno que estás por abrir! 😊 Contame un poco más:
@@ -330,6 +335,7 @@ const conversaciones = {};
 const primerMensaje = {};
 const debounceTimers = {};
 const mensajesPendientes = {};
+const estadoConversacion = {}; // 'esperando_opcion' | null
 const fs = require('fs');
 const NUMEROS_FILE = '/tmp/numeros_conocidos.json';
 
