@@ -293,6 +293,12 @@ Ubicación: "Estamos ubicados en Lanús y trabajamos en todo Buenos Aires 📍 H
 Plazo entrega: "El envío tiene un plazo de 7 días hábiles desde la aprobación del crédito 😊"
 Pago por mes/quincena: "Los pagos son diarios o semanales únicamente 😊"
 Pago semanal: "¡Sí! Se calcula así: cuota diaria x cantidad de días del plan = total, y ese total lo dividís por las semanas del plan:\n📅 Plan 80 días = 13 semanas\n📅 Plan 100 días = 16 semanas\n📅 Plan 120 días = 20 semanas\nPor ejemplo: si la cuota diaria es $33.050 en 100 días → $33.050 x 100 = $3.305.000 total ÷ 16 semanas = $206.562 por semana.\nIndicame qué producto te interesa y te calculo el valor semanal exacto 😊"
+
+REGLA DE SEMANAS (MUY IMPORTANTE - nunca te equivoques):
+- 80 días = SIEMPRE 13 semanas (80 ÷ 6 = 13.3, redondeado a 13)
+- 100 días = SIEMPRE 16 semanas (100 ÷ 6 = 16.6, redondeado a 16)
+- 120 días = SIEMPRE 20 semanas (120 ÷ 6 = 20)
+- NUNCA digas 11 semanas para 80 días
 Días de pago: "Los pagos son de lunes a sábado incluyendo feriados 😊"
 Domingos: "Los domingos no se abona 😊"
 Seña: "No, no se abona ninguna seña. Empezás a pagar una vez que recibís el producto 😊"
@@ -302,7 +308,11 @@ Devoluciones: "No aceptamos devoluciones. En caso de no abonar las cuotas se sol
 Adelantar cuotas: "¡Sí, podés adelantar cuotas sin problema! 😊"
 Aprobación crédito: "La aprobación es en el momento, generalmente el mismo día 😊"
 Renovación: "¡Sí, podés renovar! Lo evaluamos a partir de la mitad del crédito 😊"
-Local físico: "No contamos con local a la vista, trabajamos de forma online. Hacemos envíos sin cargo a domicilio 🚛😊"
+Local físico o si preguntan si son reales/confiables: "No contamos con local a la vista, trabajamos de forma online. Hacemos envíos sin cargo a domicilio 🚛
+Podés ver las reseñas de nuestros clientes acá 😊
+⭐ Google: https://share.google/vTPvl92SaWbshmixf
+📸 Instagram: https://www.instagram.com/pagosur
+🔗 Catálogo: https://linktr.ee/pagosur"
 Precio al contado: "Para consultas sobre precios al contado, Wendy se comunica con vos en breve 😊 Nuestro horario de atención es de lunes a viernes de 10 a 18hs."
 Descuentos: "Los precios son los del catálogo, sin descuentos adicionales 😊"
 Solo envíos: "Realizamos envíos a domicilio sin cargo, no hacemos retiro en persona 😊"
@@ -320,6 +330,30 @@ const conversaciones = {};
 const primerMensaje = {};
 const debounceTimers = {};
 const mensajesPendientes = {};
+const fs = require('fs');
+const NUMEROS_FILE = '/tmp/numeros_conocidos.json';
+
+function cargarNumerosConocidos() {
+  try {
+    if (fs.existsSync(NUMEROS_FILE)) {
+      return JSON.parse(fs.readFileSync(NUMEROS_FILE, 'utf8'));
+    }
+  } catch(e) {}
+  return {};
+}
+
+function guardarNumeroConocido(numero) {
+  try {
+    const conocidos = cargarNumerosConocidos();
+    conocidos[numero] = new Date().toISOString();
+    fs.writeFileSync(NUMEROS_FILE, JSON.stringify(conocidos));
+  } catch(e) {}
+}
+
+function esNumeroConocido(numero) {
+  const conocidos = cargarNumerosConocidos();
+  return !!conocidos[numero];
+}
 
 async function esClienteActivo(numero) {
   return new Promise((resolve) => {
@@ -461,7 +495,13 @@ app.post('/webhook', async (req, res) => {
 
       let mensajeAEnviar = mensajesAcumulados;
       if (primerMensaje[numero]) {
-        mensajeAEnviar = '[PRIMER MENSAJE DEL CLIENTE - responder SIEMPRE con el mensaje de bienvenida sin importar lo que haya escrito] ' + mensajesAcumulados;
+        const yaConocido = esNumeroConocido(numero);
+        if (yaConocido) {
+          mensajeAEnviar = '[EL CLIENTE YA HABLÓ ANTES - NO mandes el mensaje de bienvenida. Respondé con "¡Hola de nuevo! 😊 ¿En qué te puedo ayudar?" y atendé su consulta normalmente] ' + mensajesAcumulados;
+        } else {
+          mensajeAEnviar = '[PRIMER MENSAJE DEL CLIENTE - responder SIEMPRE con el mensaje de bienvenida sin importar lo que haya escrito] ' + mensajesAcumulados;
+          guardarNumeroConocido(numero);
+        }
         primerMensaje[numero] = false;
       }
 
