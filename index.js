@@ -205,11 +205,15 @@ FREEZERS Inelro:
 - FIH-350 280lts 1 canasto: 120 días $9.400
 - FIH-350 PI 280lts tapa vidrio: 120 días $12.200
 - FIH-550 470lts 2 canastos: 120 días $13.300
-- FIH-550 PI 455lts tapa vidrio: 120 días $14.500
+- FIH-550 PI 455lts tapa vidrio: 120 días $16.600
 
 FREEZER VERTICAL Inelro BT-17:
 428lts No Frost, -20/-12C, LED perimetral, puerta doble vidrio templado argón, 5 estantes anticorrosión, 900W, 68x64x206cm, gas R290.
 80 días $45.200 / 120 días $35.800
+
+IMPORTANTE SOBRE PRODUCTOS:
+- Para heladerías (negocios que venden helados): recomendar FREEZERS, NO heladeras exhibidoras. Las heladeras exhibidoras son para bebidas y lácteos, no para helados.
+- Si el cliente dice "no [producto]" significa que NO quiere ese producto, preguntale qué está buscando entonces.
 
 HORNOS - cuando pregunten por hornos, primero preguntá:
 "¡Claro! 😊 ¿Qué tipo de horno buscás?
@@ -314,6 +318,8 @@ Despedida: "¡Gracias a vos! 😊 Cualquier consulta estamos acá. ¡Que tengas 
 
 const conversaciones = {};
 const primerMensaje = {};
+const debounceTimers = {};
+const mensajesPendientes = {};
 
 async function esClienteActivo(numero) {
   return new Promise((resolve) => {
@@ -404,28 +410,40 @@ app.post('/webhook', async (req, res) => {
     // Si hay un operador asignado, no responder (el humano atiende)
     if (body.assignedId && body.assignedId !== null && body.assignedId !== '') return;
 
+    const channelPhone = body.channelPhoneNumber || '5491178215301';
+
     // Verificar si es cliente activo
     const clienteActivo = await esClienteActivo(numero);
-    const channelPhone = body.channelPhoneNumber || '5491125973799';
-
     if (clienteActivo) {
       await enviarMensajeWATI(numero, '¡Gracias por tu pago! 😊 Quedó registrado 🙌🏻', channelPhone);
       return;
     }
 
-    if (!conversaciones[numero]) {
-      conversaciones[numero] = [];
-      primerMensaje[numero] = true;
-    }
+    // Acumular mensajes con debounce de 10 segundos
+    if (!mensajesPendientes[numero]) mensajesPendientes[numero] = [];
+    mensajesPendientes[numero].push(mensajeFinal);
 
-    if (primerMensaje[numero]) {
-      mensajeFinal = '[PRIMER MENSAJE DEL CLIENTE - responder SIEMPRE con el mensaje de bienvenida sin importar lo que haya escrito] ' + mensajeFinal;
-      primerMensaje[numero] = false;
-    }
+    if (debounceTimers[numero]) clearTimeout(debounceTimers[numero]);
 
-    conversaciones[numero].push({ role: 'user', content: mensajeFinal });
+    debounceTimers[numero] = setTimeout(async () => {
+      const mensajesAcumulados = mensajesPendientes[numero].join(' ');
+      mensajesPendientes[numero] = [];
 
-    const dolar = await getDolarBNA();
+      if (!conversaciones[numero]) {
+        conversaciones[numero] = [];
+        primerMensaje[numero] = true;
+      }
+
+      let mensajeAEnviar = mensajesAcumulados;
+      if (primerMensaje[numero]) {
+        mensajeAEnviar = '[PRIMER MENSAJE DEL CLIENTE - responder SIEMPRE con el mensaje de bienvenida sin importar lo que haya escrito] ' + mensajesAcumulados;
+        primerMensaje[numero] = false;
+      }
+
+      conversaciones[numero].push({ role: 'user', content: mensajeAEnviar });
+
+      try {
+        const dolar = await getDolarBNA();
     const precios = await getPreciosCalculados(dolar);
 
     const preciosTexto = `
@@ -473,8 +491,13 @@ TORTERA/PECERA:
     const textoRespuesta = respuesta.choices[0].message.content;
     conversaciones[numero].push({ role: 'assistant', content: textoRespuesta });
 
-    // Enviar respuesta via WATI
-    await enviarMensajeWATI(numero, textoRespuesta, channelPhone);
+        // Enviar respuesta via WATI
+        await enviarMensajeWATI(numero, textoRespuesta, channelPhone);
+
+      } catch (error) {
+        console.error('Error en debounce:', error);
+      }
+    }, 10000); // 10 segundos de espera
 
   } catch (error) {
     console.error('Error:', error);
