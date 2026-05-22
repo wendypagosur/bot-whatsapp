@@ -19,6 +19,13 @@ app.use((req, res, next) => {
 
 const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
 
+function calcularSemanal(cuotaDiaria, dias) {
+  const total = cuotaDiaria * dias;
+  const semanas = dias === 80 ? 13 : dias === 100 ? 16 : 20;
+  const semanal = Math.round(total / semanas);
+  return { total, semanas, semanal };
+}
+
 async function getDolarBNA() {
   return new Promise((resolve) => {
     https.get('https://dolarapi.com/v1/dolares/oficial', (res) => {
@@ -227,24 +234,24 @@ HORNOS - cuando pregunten por hornos, primero preguntá:
 3️⃣ Horno convector (eléctrico)"
 
 HORNOS PIZZEROS Morelli (a gas natural o envasado, ladrillos refractarios):
-- Pizzero 6 moldes: 100 días $6.650
-- Pizzero 12 moldes: 100 días $8.400
+- Pizzero 6 moldes: 100 días $6.850
+- Pizzero 12 moldes: 100 días $8.600
 
 HORNOS PASTELEROS Morelli (a gas natural o envasado, ladrillos refractarios):
-- Pastelero 6 moldes: 100 días $11.150
-- Pastelero 12 moldes: 100 días $20.150
-- Pastelero 18 moldes: 100 días $24.200
+- Pastelero 6 moldes: 100 días $12.000
+- Pastelero 12 moldes: 100 días $21.650
+- Pastelero 18 moldes: SIN STOCK (no mencionar salvo que el cliente pregunte específicamente)
 
 HORNOS CONVECTORES (eléctricos):
 - Morelli 4 moldes: 80 días $12.500
-- Moretti 4 bandejas 43x32: 100 días $13.200
+- Moretti 4 bandejas 43x32: SIN STOCK (no mencionar salvo que el cliente pregunte específicamente)
 - Moretti 4 bandejas 60x40: 100 días $28.200
 - Moretti 5 bandejas programable: 100 días $88.500
 
 FREIDORAS GAS Morelli:
-- 15lts: 100 días $6.500
-- 35lts: 100 días $8.000
-- Eco 30lts: 100 días $16.700
+- 15lts: 100 días $6.850
+- 35lts: 100 días $8.400
+- Eco 30lts: 100 días $17.700
 
 FREIDORAS ELECTRICAS Moretti:
 - Eléctrica 8lts: 80 días $4.400
@@ -300,10 +307,13 @@ Pago por mes/quincena: "Los pagos son diarios o semanales únicamente 😊"
 Pago semanal: "¡Sí! Se calcula así: cuota diaria x cantidad de días del plan = total, y ese total lo dividís por las semanas del plan:\n📅 Plan 80 días = 13 semanas\n📅 Plan 100 días = 16 semanas\n📅 Plan 120 días = 20 semanas\nPor ejemplo: si la cuota diaria es $33.050 en 100 días → $33.050 x 100 = $3.305.000 total ÷ 16 semanas = $206.562 por semana.\nIndicame qué producto te interesa y te calculo el valor semanal exacto 😊"
 
 REGLA DE SEMANAS (MUY IMPORTANTE - nunca te equivoques):
-- 80 días = SIEMPRE 13 semanas (80 ÷ 6 = 13.3, redondeado a 13)
-- 100 días = SIEMPRE 16 semanas (100 ÷ 6 = 16.6, redondeado a 16)
-- 120 días = SIEMPRE 20 semanas (120 ÷ 6 = 20)
+- 80 días = SIEMPRE 13 semanas
+- 100 días = SIEMPRE 16 semanas  
+- 120 días = SIEMPRE 20 semanas
 - NUNCA digas 11 semanas para 80 días
+- FORMULA SEMANAL: cuota diaria x dias = total, total ÷ semanas = cuota semanal
+- Ejemplo correcto: $12.500 x 80 dias = $1.000.000 total ÷ 13 semanas = $76.923 por semana
+- NUNCA dividas solo la cuota diaria por las semanas - ESO ESTÁ MAL
 Días de pago: "Los pagos son de lunes a sábado incluyendo feriados 😊"
 Domingos: "Los domingos no se abona 😊"
 Seña: "No, no se abona ninguna seña. Empezás a pagar una vez que recibís el producto 😊"
