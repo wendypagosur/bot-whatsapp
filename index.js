@@ -461,9 +461,8 @@ app.post('/webhook', async (req, res) => {
 
   try {
     const body = req.body;
-    if (!body || typeof body !== 'object') return;
-    
-    // Formato WATI
+const body = req.body;
+console.log('BODY COMPLETO:', JSON.stringify(body));    // Formato WATI
     const numero = body.waId;
     let mensajeFinal = '';
 
@@ -586,3 +585,4 @@ TORTERA/PECERA:
 });
 
 app.listen(3000, () => console.log('Bot Uma corriendo en puerto 3000'));
+
