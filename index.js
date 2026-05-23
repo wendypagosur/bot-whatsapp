@@ -461,7 +461,6 @@ app.post('/webhook', async (req, res) => {
 
   try {
     const body = req.body;
-const body = req.body;
 console.log('BODY COMPLETO:', JSON.stringify(body));    // Formato WATI
     const numero = body.waId;
     let mensajeFinal = '';
