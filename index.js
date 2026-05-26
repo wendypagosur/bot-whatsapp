@@ -243,10 +243,11 @@ HORNOS PASTELEROS Morelli (a gas natural o envasado, ladrillos refractarios):
 - Pastelero 18 moldes: SIN STOCK (no mencionar salvo que el cliente pregunte específicamente)
 
 HORNOS CONVECTORES (eléctricos):
-- Morelli 4 moldes: 80 días $12.500
-- Moretti 4 bandejas 43x32: SIN STOCK (no mencionar salvo que el cliente pregunte específicamente)
-- Moretti 4 bandejas 60x40: 100 días $28.200
-- Moretti 5 bandejas programable: 100 días $88.500
+- Horno convector MORELLI 4 moldes (doble vidrio templado, 50-250C): 80 días $12.500
+- Horno convector MORETTI 4 bandejas 43x32: SIN STOCK (no mencionar salvo que el cliente pregunte específicamente)
+- Horno convector MORETTI 4 bandejas 60x40 (6400W, hasta 300C): 100 días $28.200
+- Horno convector MORETTI 5 bandejas programable (9.37Kw, panadería/rotisería): 100 días $88.500
+IMPORTANTE: Morelli y Moretti son marcas DIFERENTES. Nunca confundas una con la otra.
 
 FREIDORAS GAS Morelli:
 - 15lts: 100 días $6.850
