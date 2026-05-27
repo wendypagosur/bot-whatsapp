@@ -515,6 +515,16 @@ app.post('/webhook', async (req, res) => {
     // Si hay un operador asignado, no responder (el humano atiende)
     if (body.assignedId && body.assignedId !== null && body.assignedId !== '') return;
 
+    // Ignorar emojis solos y respuestas cortas de confirmación cuando ya terminó la conver
+    const mensajesIgnorar = ['👍', '👌', '✅', '🙏', '❤️', '😊', '👏', 'ok', 'OK', 'Oke', 'dale', 'listo', 'gracias', 'Gracias', 'GRACIAS'];
+    const conversacionTerminada = conversaciones[numero] && conversaciones[numero].some(m => 
+      m.role === 'assistant' && (
+        m.content.includes('¡Éxitos! 👋') || 
+        m.content.includes('no llegamos a esa zona')
+      )
+    );
+    if (conversacionTerminada && mensajesIgnorar.some(m => mensajeFinal.trim() === m)) return;
+
     const channelPhone = body.channelPhoneNumber || '5491178215301';
 
     // Verificar si es cliente activo
