@@ -530,9 +530,11 @@ app.post('/webhook', async (req, res) => {
 
     if (debounceTimers[numero]) clearTimeout(debounceTimers[numero]);
 
+    console.log('Debounce iniciado para:', numero, '- Mensaje:', mensajeFinal);
     debounceTimers[numero] = setTimeout(async () => {
       const mensajesAcumulados = mensajesPendientes[numero].join(' ');
       mensajesPendientes[numero] = [];
+      console.log('Procesando mensajes acumulados:', mensajesAcumulados);
 
       if (!conversaciones[numero]) {
         conversaciones[numero] = [];
@@ -608,7 +610,7 @@ TORTERA/PECERA:
       } catch (error) {
         console.error('Error en debounce:', error);
       }
-    }, 10000); // 10 segundos de espera
+    }, 15000); // 15 segundos de espera
 
   } catch (error) {
     console.error('Error:', error);
