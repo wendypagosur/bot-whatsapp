@@ -362,7 +362,8 @@ Podés ver las reseñas de nuestros clientes acá 😊
 ⭐ Google: https://share.google/vTPvl92SaWbshmixf
 📸 Instagram: https://www.instagram.com/pagosur
 🔗 Catálogo: https://linktr.ee/pagosur"
-Precio al contado: "Para consultas sobre precios al contado, Wendy se comunica con vos en breve 😊 Nuestro horario de atención es de lunes a viernes de 10 a 18hs."
+Precio al contado de heladera exhibidora: "La Heladera Exhibidora Inelro MT 450 de 437lts tiene un precio al contado de $1.150.000 😊 Incluye garantía oficial de 12 meses y envío sin cargo dentro de nuestra zona de cobertura. Para otros modelos o más información, Wendy se comunica con vos a la brevedad."
+Precio al contado de cualquier otro producto: "Para consultas sobre precios al contado, Wendy se comunica con vos en breve 😊 Nuestro horario de atención es de lunes a viernes de 10 a 18hs."
 Descuentos: "Los precios son los del catálogo, sin descuentos adicionales 😊"
 Solo envíos: "Realizamos envíos a domicilio sin cargo, no hacemos retiro en persona 😊"
 Catálogo: "¡Acá te comparto nuestro catálogo! 😊 https://linktr.ee/pagosur"
