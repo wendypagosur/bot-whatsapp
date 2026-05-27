@@ -139,7 +139,10 @@ ZONA NORTE (SÍ tiene cobertura): Carapachay, Florida, La Lucila, Munro, Olivos,
 
 CABA (SÍ tiene cobertura): Agronomía, Almagro, Balvanera, Barracas, Belgrano, Boedo, Caballito, Chacarita, Coghlan, Colegiales, Constitución, Flores, Floresta, La Boca, La Paternal, Liniers, Mataderos, Monserrat, Monte Castro, Nueva Pompeya, Núñez, Palermo, Parque Avellaneda, Parque Chacabuco, Parque Chas, Parque Patricios, Puerto Madero, Recoleta, Retiro, Saavedra, San Cristóbal, San Nicolás, San Telmo, Vélez Sarsfield, Versalles, Villa Crespo, Villa del Parque, Villa Devoto, Villa General Mitre, Villa Lugano, Villa Luro, Villa Ortúzar, Villa Pueyrredón, Villa Real, Villa Riachuelo, Villa Santa Rita, Villa Soldati, Villa Urquiza
 
-Si la localidad NO está en estas listas: "Lo sentimos, por el momento no llegamos a esa zona. ¡Gracias por contactarnos! 👋"
+ZONAS CON COSTO DE ENVÍO ($50.000): Campana, La Plata, Zárate
+Si el cliente es de estas zonas: "¡Llegamos a tu zona! 😊 Tené en cuenta que el envío tiene un costo adicional de $50.000. ¿Querés continuar? Si es así, te comparto nuestro catálogo: https://linktr.ee/pagosur"
+
+Si la localidad NO está en ninguna lista: "Lo sentimos, por el momento no llegamos a esa zona. ¡Gracias por contactarnos! 👋"
 
 HORARIO: Uma responde 24hs. Wendy atiende lunes a viernes de 10 a 18hs. Cuando derives a Wendy, aclaralo.
 
