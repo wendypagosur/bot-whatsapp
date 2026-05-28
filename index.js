@@ -328,6 +328,8 @@ FREIDORAS ELECTRICAS Moretti:
 - Inducción 23lts: 100 días $51.850
 
 EQUIPAMIENTO CARNICERÍA:
+IMPORTANTE: No tenemos cortadora de fiambre/cortafiambre. Si preguntan por ese producto, decí que no lo tenemos y ofrecé ver el catálogo completo.
+
 - Embutidora vertical 15lts: 100 días $11.000
 - Sierra carnicera 650W: 100 días $23.600
 - Sierra carnicera 1000W: 100 días $31.650
