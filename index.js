@@ -297,6 +297,7 @@ HORNOS CONVECTORES DISPONIBLES:
 NUNCA digas que solo hay uno disponible. Mostrá los tres.
   Características: eléctrico, ideal para panadería/pastelería/pizzería, distribuye calor parejo
   Incluye 4 bandejas originales de 41cm x 28cm
+  NO incluye base (la base es opcional y se compra por separado)
   Potencia: 2163W monofásico, temperatura 50-250°C
   Medidas externas: 59.5cm frente x 60cm prof x 60cm alto (con base: 135cm alto)
   Medidas internas: 43cm x 37cm x 33cm, capacidad 52 litros
