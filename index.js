@@ -169,6 +169,7 @@ ZONAS DE COBERTURA:
 ZONA SUR ✅: Avellaneda, Dock Sud, Gerli, Piñeiro, Sarandí, Villa Domínico, Wilde, Lanús, Lanús Este, Lanús Oeste, Monte Chingolo, Remedios de Escalada, Valentín Alsina, Banfield, Llavallol, Lomas de Zamora, Temperley, Turdera, Villa Centenario, Villa Fiorito, Ingeniero Budge, Adrogué, Burzaco, Claypole, Don Orione, Glew, José Mármol, Longchamps, Malvinas Argentinas, Ministro Rivadavia, Rafael Calzada, San Francisco Solano, Bernal, Don Bosco, Ezpeleta, Quilmes, Villa La Florida, Berazategui, El Pato, Hudson, Juan María Gutiérrez, Pereyra, Plátanos, Ranelagh, Sourigues, Villa España, Bosques, Florencio Varela, Ingeniero Allan, La Capilla, Villa Brown, Villa Vatteone, Zeballos, 9 de Abril, Canning, El Jagüel, Luis Guillón, Monte Grande, Carlos Spegazzini, Ezeiza, La Unión, Tristán Suárez, Guernica, Alejandro Korn, Domselaar, San Vicente
 ⚠️ Tristán Suárez → SIEMPRE tiene cobertura, es Zona Sur. NUNCA digas que no llegamos.
 ⚠️ Don Bosco → SIEMPRE tiene cobertura, es Zona Sur (partido de Quilmes). NUNCA digas que no llegamos.
+⚠️ Cañuelas → SIEMPRE tiene cobertura, es Zona Sur. NUNCA digas que no llegamos.
 
 ZONA OESTE ✅: Castelar, El Palomar, Haedo, Morón, Villa Sarmiento, Ituzaingó, Villa Udaondo, Hurlingham, Villa Tesei, William Morris, Libertad, Merlo, Pontevedra, Parque San Martín, San Antonio de Padua, Padua, Cuartel V, Francisco Álvarez, La Reja, Moreno, Paso del Rey, Trujui, Aldo Bonzi, Ciudad Evita, González Catán, Laferrere, Gregorio de Laferrere, Isidro Casanova, La Tablada, Lomas del Mirador, Rafael Castillo, Ramos Mejía, San Justo, Tapiales, Villa Celina, Villa Luzuriaga, Virrey del Pino, Caseros, Ciudad Jardín, Ciudadela, José Ingenieros, Loma Hermosa, Martín Coronado, Pablo Podestá, Santos Lugares, Villa Bosch, General Rodríguez, Luján, Marcos Paz
 ⚠️ General Rodríguez → SIEMPRE tiene cobertura, es Zona Oeste. NUNCA digas que no llegamos.
@@ -660,27 +661,27 @@ app.post('/webhook', async (req, res) => {
 PRECIOS CALCULADOS HOY (usá EXACTAMENTE estos valores):
 BATEA VIDRIO CURVO:
 - 1.20mt: 100 días ${formatPesos(precios.batea_curvo_120_100d)} / 80 días ${formatPesos(precios.batea_curvo_120_80d)}
-- 1.60mt: 100 días $31.950 / 80 días ${formatPesos(precios.batea_curvo_160_80d)}
+- 1.60mt: 100 días $32.800 / 80 días ${formatPesos(precios.batea_curvo_160_80d)}
 - 2mts: 100 días ${formatPesos(precios.batea_curvo_200_100d)} / 80 días ${formatPesos(precios.batea_curvo_200_80d)}
 - 2.50mt: 100 días ${formatPesos(precios.batea_curvo_250_100d)} / 80 días ${formatPesos(precios.batea_curvo_250_80d)}
 - 3mts: 100 días ${formatPesos(precios.batea_curvo_300_100d)} / 80 días ${formatPesos(precios.batea_curvo_300_80d)}
 
 BATEA VIDRIO RECTO:
 - 1.20mt: 100 días ${formatPesos(precios.batea_recto_120_100d)} / 80 días ${formatPesos(precios.batea_recto_120_80d)}
-- 1.60mt: 100 días $30.050 / 80 días ${formatPesos(precios.batea_recto_160_80d)}
+- 1.60mt: 100 días $30.850 / 80 días ${formatPesos(precios.batea_recto_160_80d)}
 - 2mts: 100 días ${formatPesos(precios.batea_recto_200_100d)} / 80 días ${formatPesos(precios.batea_recto_200_80d)}
 - 2.50mt: 100 días ${formatPesos(precios.batea_recto_250_100d)} / 80 días ${formatPesos(precios.batea_recto_250_80d)}
 - 3mts: 100 días ${formatPesos(precios.batea_recto_300_100d)} / 80 días ${formatPesos(precios.batea_recto_300_80d)}
 
 MOSTRADOR CON BAJADA:
-- 1.60mt: 100 días $35.500 / 80 días ${formatPesos(precios.mostrador_bajada_160_80d)}
+- 1.60mt: 100 días $36.450 / 80 días ${formatPesos(precios.mostrador_bajada_160_80d)}
 - 2mts: 100 días ${formatPesos(precios.mostrador_bajada_200_100d)} / 80 días ${formatPesos(precios.mostrador_bajada_200_80d)}
 - 2.50mt: 100 días ${formatPesos(precios.mostrador_bajada_250_100d)} / 80 días ${formatPesos(precios.mostrador_bajada_250_80d)}
 - 3mts: 100 días ${formatPesos(precios.mostrador_bajada_300_100d)} / 80 días ${formatPesos(precios.mostrador_bajada_300_80d)}
 
 MOSTRADOR RECTA:
 - 1.20mt: 100 días ${formatPesos(precios.mostrador_recta_120_100d)} / 80 días ${formatPesos(precios.mostrador_recta_120_80d)}
-- 1.60mt: 100 días $36.650 / 80 días ${formatPesos(precios.mostrador_recta_160_80d)}
+- 1.60mt: 100 días $37.650 / 80 días ${formatPesos(precios.mostrador_recta_160_80d)}
 - 2mts: 100 días ${formatPesos(precios.mostrador_recta_200_100d)} / 80 días ${formatPesos(precios.mostrador_recta_200_80d)}
 
 TORTERA/PECERA:
